@@ -1,0 +1,10 @@
+# Python
+__pycache__/
+*.pyc
+
+# Intermediate HTML (PDF est versionné, pas le HTML)
+docs/cahier_des_charges.html
+tp_preparatoire/td3_modele_vectoriel/reponses.html
+
+# Rendus zippés (à uploader manuellement sur Moodle)
+tp_preparatoire/rendu_tp_python.zip
