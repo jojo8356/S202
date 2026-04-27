@@ -1,7 +1,7 @@
 ---
 title: "Cahier des charges — Moteur de recherche **HeRVé**"
 subtitle: "S2.02 · Exploration algorithmique d'un problème · UniCA 2025‑2026"
-author: "Product Owner — *issu de Google Search, 12 ans d'expérience en Information Retrieval*"
+author: ""
 date: "Avril 2026 · v1.0"
 ---
 
@@ -747,4 +747,4 @@ L'accès SSH au GitLab IUT passe par le **VPN universitaire** depuis l'extérieu
 
 ---
 
-*Cahier des charges rédigé selon les standards Product Requirements Document (PRD) et adapté au cadre pédagogique de l'IUT.* — *fin du document.*
+*Cahier des charges adapté au cadre pédagogique de l'IUT.* — *fin du document.*
