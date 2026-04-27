@@ -1,7 +1,7 @@
 ---
-title: "TP préparatoire — Recherche vectorielle (TD1, §5)"
-subtitle: "S2.02 · Exploration algorithmique d'un problème · UniCA 2025‑2026"
-author: "Erwan Nalin"
+title: "SAE 202 — TP Préparatoire — Recherche vectorielle (TD1, §5)"
+subtitle: "BUT Informatique · UniCA 2025‑2026"
+author: "Johan Polsinelli"
 date: "Avril 2026"
 ---
 
@@ -14,6 +14,7 @@ Les implémentations Python associées sont dans :
 - `librairie.py` — fonctions vectorielles + lemmatisation/filtrage,
 - `moteur_de_recherche.py` — moteur de base (modifié pour gérer la requête « pomme de terre », Ex 14.2),
 - `moteur_de_recherche_ameliore.py` — moteur avec pondération TF‑IDF.
+- `verifier_calculs.py` — script de validation (ré‑exécute en arithmétique exacte tous les calculs de l'Ex 13 avec les modules `fractions` et `decimal` à 50 chiffres significatifs, pour éviter toute erreur d'arrondi binaire ; le script imprime ✅ si toutes les valeurs reportées dans ce document concordent à 4 décimales près).
 
 ---
 
@@ -92,7 +93,7 @@ Les vecteurs normalisés $\vec{u_i} = \vec{d_i} / \|\vec{d_i}\|$ sont :
 | $\vec{u_1}$ | 0,0000 | 0,1622 | 0,1622 | 0,9733 |
 | $\vec{u_2}$ | 0,4045 | 0,1348 | 0,4045 | 0,8090 |
 | $\vec{u_3}$ | 0,5443 | 0,4082 | 0,2722 | 0,6804 |
-| $\vec{u_4}$ | 0,3492 | 0,3990 | 0,0000 | 0,8479 |
+| $\vec{u_4}$ | 0,3491 | 0,3990 | 0,0000 | 0,8479 |
 | $\vec{u_5}$ | 0,3560 | 0,5934 | 0,1187 | 0,7121 |
 
 ## Question 1.b — Requête « tomate poivron »
@@ -107,10 +108,10 @@ La similarité cosinus avec chaque document est $\mathrm{sim}(\vec{r}, \vec{d_i}
 
 $$
 \begin{aligned}
-\mathrm{sim}(\vec{r}, \vec{d_1}) &= \frac{0 + 2 + 12}{\sqrt{2}\sqrt{152}} = \frac{14}{\sqrt{304}} \approx 0{,}8029 \\
+\mathrm{sim}(\vec{r}, \vec{d_1}) &= \frac{0 + 2 + 12}{\sqrt{2}\sqrt{152}} = \frac{14}{\sqrt{304}} \approx 0{,}8030 \\
 \mathrm{sim}(\vec{r}, \vec{d_2}) &= \frac{3 + 6}{\sqrt{2}\sqrt{55}}  = \frac{9}{\sqrt{110}}   \approx 0{,}8581 \\
 \mathrm{sim}(\vec{r}, \vec{d_3}) &= \frac{2 + 5}{\sqrt{2}\sqrt{54}}  = \frac{7}{\sqrt{108}}   \approx 0{,}6736 \\
-\mathrm{sim}(\vec{r}, \vec{d_4}) &= \frac{0 + 17}{\sqrt{2}\sqrt{402}} = \frac{17}{\sqrt{804}} \approx 0{,}5996 \\
+\mathrm{sim}(\vec{r}, \vec{d_4}) &= \frac{0 + 17}{\sqrt{2}\sqrt{402}} = \frac{17}{\sqrt{804}} \approx 0{,}5995 \\
 \mathrm{sim}(\vec{r}, \vec{d_5}) &= \frac{1 + 6}{\sqrt{2}\sqrt{71}}  = \frac{7}{\sqrt{142}}   \approx 0{,}5874
 \end{aligned}
 $$
