@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+# Pre-commit hook — vérifie que les fichiers Java staged respectent
+# le Google Java Style (cf. ADR-0001).
+#
+# Activation (à faire UNE FOIS par contributeur) :
+#   git config core.hooksPath .githooks
+#
+# Pré-requis : google-java-format installé (cf. CONTRIBUTING.md §6.5).
+
+set -e
+
+# 1. Vérifier que google-java-format est dispo
+if ! command -v google-java-format > /dev/null 2>&1; then
+    echo "ERREUR : google-java-format n'est pas installé."
+    echo "Voir CONTRIBUTING.md §6.5 pour l'installation."
+    exit 1
+fi
+
+# 2. Lister les fichiers .java staged (Added/Copied/Modified/Renamed)
+STAGED_JAVA=$(git diff --cached --name-only --diff-filter=ACMR | grep '\.java$' || true)
+
+if [ -z "$STAGED_JAVA" ]; then
+    exit 0  # rien à formater, on laisse passer
+fi
+
+# 3. Vérifier le formatage (sans modifier les fichiers)
+#    --dry-run liste les fichiers qui SERAIENT modifiés s'il formatait.
+UNFORMATTED=$(echo "$STAGED_JAVA" | xargs google-java-format --dry-run 2> /dev/null || true)
+
+if [ -n "$UNFORMATTED" ]; then
+    echo ""
+    echo "Fichiers non conformes au Google Java Style :"
+    echo "$UNFORMATTED" | sed 's/^/  - /'
+    echo ""
+    echo "Pour corriger en place :"
+    echo "  google-java-format -i $(echo "$UNFORMATTED" | tr '\n' ' ')"
+    echo ""
+    echo "Puis re-stager les fichiers :"
+    echo "  git add $(echo "$UNFORMATTED" | tr '\n' ' ')"
+    exit 1
+fi
+
+exit 0

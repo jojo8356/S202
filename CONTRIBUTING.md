@@ -283,6 +283,69 @@ require("conform").setup({
 
 `File > Settings > Editor > Code Style > Java > ⚙ > Import Scheme > Eclipse XML Profile...` → choisir le XML téléchargé. Activer `Reformat code` et `Optimize imports` dans les Actions on Save.
 
+### 6.5 Auto-formatage en ligne de commande + git hook
+
+En complément du formatter d'IDE (qui peut être oublié, désactivé, ou différer entre contributeurs), on a un **garde-fou Git** : un hook `pre-commit` qui refuse les fichiers `.java` non conformes au Google Java Style. Doublé d'un job CI `lint` qui rebloque côté serveur si quelqu'un push avec `--no-verify`.
+
+#### Étape 1 — Installer `google-java-format` (CLI)
+
+```bash
+# Debian / Ubuntu
+sudo apt install google-java-format
+
+# Arch
+sudo pacman -S google-java-format
+
+# macOS
+brew install google-java-format
+
+# Fallback universel (JAR portable, marche partout où Java tourne)
+mkdir -p ~/.local/bin ~/.local/share
+wget https://github.com/google/google-java-format/releases/download/v1.22.0/google-java-format-1.22.0-all-deps.jar \
+  -O ~/.local/share/google-java-format.jar
+cat > ~/.local/bin/google-java-format <<'EOF'
+#!/usr/bin/env bash
+exec java -jar "$HOME/.local/share/google-java-format.jar" "$@"
+EOF
+chmod +x ~/.local/bin/google-java-format
+# Ajouter ~/.local/bin au PATH si pas déjà fait
+```
+
+Vérifier :
+```bash
+google-java-format --version
+# google-java-format: Version 1.22.0
+```
+
+#### Étape 2 — Activer le hook `pre-commit` du repo
+
+```bash
+git config core.hooksPath .githooks
+```
+
+À faire **une fois par contributeur**, après chaque clone. Aucun effet pushé — Git ne stocke pas cette config dans le repo (volontaire). Cf. `.githooks/README.md`.
+
+À partir de là, à chaque `git commit`, le hook vérifie les `.java` staged. Si un fichier n'est pas conforme, le commit est refusé avec la liste des fautifs et la commande pour corriger.
+
+#### Étape 3 — Auto-formater à la demande
+
+```bash
+# Formater un fichier précis (in-place)
+google-java-format -i src/search_engine/IndexedPage.java
+
+# Formater tout le code Java du projet
+find src -name "*.java" -print0 | xargs -0 google-java-format -i
+
+# Vérifier sans modifier (utile en CI ou en check rapide)
+find src -name "*.java" -print0 | xargs -0 google-java-format --dry-run --set-exit-if-changed
+```
+
+#### Étape 4 — Filet de sécurité côté serveur
+
+Le job `lint` du `.gitlab-ci.yml` télécharge `google-java-format` et lance `--dry-run --set-exit-if-changed` sur tout `src/`. Pipeline rouge → MR bloquée → personne ne push du code mal formaté en production.
+
+> 💡 **MR avec pipeline `lint` rouge** : `find src -name "*.java" -print0 | xargs -0 google-java-format -i`, puis `git add` + nouveau commit. Pas de bypass.
+
 ---
 
 ## 7. Procédure de rendu d'une version (chef de projet)

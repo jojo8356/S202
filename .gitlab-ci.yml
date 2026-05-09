@@ -1,9 +1,10 @@
 # GitLab CI/CD pipeline pour HeRVé
-# Vérifie compilation + tests sur chaque push.
+# Vérifie formatage + compilation + tests sur chaque push.
 
 image: eclipse-temurin:17-jdk
 
 stages:
+  - lint
   - build
   - test
 
@@ -12,10 +13,31 @@ cache:
   key: "$CI_COMMIT_REF_SLUG"
   paths:
     - bin/
+    - .cache/
 
-# 1. Compilation : doit passer sans erreur ni warning
+variables:
+  GJF_VERSION: "1.22.0"
+  GJF_JAR: ".cache/google-java-format-${GJF_VERSION}-all-deps.jar"
+
+# 1. Lint : Google Java Style strict (rejet si un fichier .java n'est pas formaté)
+lint:
+  stage: lint
+  before_script:
+    - apt-get update -qq && apt-get install -y -qq wget
+    - mkdir -p .cache
+    - |
+      if [ ! -f "${GJF_JAR}" ]; then
+        wget -q -O "${GJF_JAR}" \
+          "https://github.com/google/google-java-format/releases/download/v${GJF_VERSION}/google-java-format-${GJF_VERSION}-all-deps.jar"
+      fi
+  script:
+    - find src -name "*.java" -print0 | xargs -0 java -jar "${GJF_JAR}" --dry-run --set-exit-if-changed
+  allow_failure: false
+
+# 2. Compilation : doit passer sans erreur ni warning
 build:
   stage: build
+  needs: ["lint"]
   script:
     - chmod +x compile_projet
     - ./compile_projet
@@ -24,7 +46,7 @@ build:
       - bin/
     expire_in: 1 day
 
-# 2. Tests : exécute SearchEngineTests, parse la sortie TAP
+# 3. Tests : exécute SearchEngineTests, parse la sortie TAP
 test:
   stage: test
   needs: ["build"]
