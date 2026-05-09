@@ -192,27 +192,96 @@ Une MR ne peut pas être mergée si le pipeline est rouge (sauf override CP).
 
 ---
 
-## 6. Configuration locale (Eclipse)
+## 6. Configuration locale (par IDE)
 
-### 6.1 Profil de formatage Google Java Style
+Le `.editorconfig` à la racine couvre déjà les bases (4 espaces, UTF-8, EOL `LF`, ligne max 100 char) — supporté nativement par Eclipse, IntelliJ, VSCode, et via plugin pour Neovim. Pour le formatage Java spécifique (ordre imports, accolades, alignements), chaque IDE doit charger le profil **Google Java Style** :
 
-`Window > Preferences > Java > Code Style > Formatter > Import...`
-Importer : <https://github.com/google/styleguide/blob/gh-pages/eclipse-java-google-style.xml>
+🔗 <https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml>
 
-### 6.2 Save Actions
+### 6.1 Eclipse
 
+**Profil de formatage** :
+`Window > Preferences > Java > Code Style > Formatter > Import...` → choisir le XML téléchargé.
+
+**Save Actions** :
 `Preferences > Java > Editor > Save Actions` → cocher :
 - Format source code (Format edited lines)
 - Organize imports
 - Additional actions : Add missing `@Override`, Remove unused imports.
 
-### 6.3 Warnings utiles
-
+**Warnings utiles** :
 `Preferences > Java > Compiler > Errors/Warnings` → activer :
 - Raw types : Warning
 - Unused local or private member : Warning
 - Unchecked generic type operation : Warning
 - Missing `@Override` annotation : Warning
+
+### 6.2 VSCode
+
+**Extensions** : installer le pack officiel **Extension Pack for Java** (Microsoft, ID `vscjava.vscode-java-pack`) — il fournit `redhat.java` (LSP basé sur Eclipse JDT), Maven, debugger, tests.
+
+**Configuration** (`.vscode/settings.json` ou settings utilisateur) :
+```json
+{
+  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+  "java.format.settings.profile": "GoogleStyle",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.organizeImports": "explicit"
+  },
+  "java.saveActions.organizeImports": true,
+  "java.completion.importOrder": ["java", "javax", "com", "org"],
+  "files.encoding": "utf8",
+  "files.eol": "\n"
+}
+```
+
+> Le LSP `redhat.java` télécharge et applique le XML Eclipse — donc même formatter que les Eclipse-istes de l'équipe : pas de drift de style.
+
+### 6.3 Neovim
+
+**Stack recommandée** : `nvim-jdtls` (JDT Language Server, mêmes règles que Eclipse) + `conform.nvim` pour formater à la sauvegarde.
+
+**Pré-requis CLI** :
+```bash
+# Installer google-java-format (pour conform.nvim ou usage CLI direct)
+sudo apt install google-java-format          # Debian/Ubuntu, à défaut :
+brew install google-java-format              # macOS
+# ou télécharger le JAR depuis https://github.com/google/google-java-format/releases
+```
+
+**Avec `nvim-jdtls`** (utilisé par `lsp-zero` ou config manuelle) — pointer vers le XML Google :
+```lua
+require('jdtls').start_or_attach({
+  cmd = { 'jdtls' },
+  settings = {
+    java = {
+      format = {
+        enabled = true,
+        settings = {
+          url = "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+          profile = "GoogleStyle",
+        },
+      },
+      saveActions = { organizeImports = true },
+    },
+  },
+})
+```
+
+**Avec `conform.nvim`** (alternative plus légère, utilise le CLI `google-java-format`) :
+```lua
+require("conform").setup({
+  formatters_by_ft = {
+    java = { "google-java-format" },
+  },
+  format_on_save = { lsp_fallback = true, timeout_ms = 1500 },
+})
+```
+
+### 6.4 IntelliJ IDEA (si quelqu'un l'utilise)
+
+`File > Settings > Editor > Code Style > Java > ⚙ > Import Scheme > Eclipse XML Profile...` → choisir le XML téléchargé. Activer `Reformat code` et `Optimize imports` dans les Actions on Save.
 
 ---
 
