@@ -53,17 +53,16 @@ On identifie les 3 risques techniques critiques (passage à 38 000 pages, cohér
 | --- | --- | --- | :---: |
 | **Haithem** | D1 | I/O, persistance, classpath | ~14 h |
 | **Hoang Xuan Mai** | D3 | TALN et algorithmes avancés | ~14 h |
-| **Theo** | D2 | Préparation équipe (Sprint 0) + classes cœur v0.2 (entrées/sorties) | ~6 h |
-| **Johan** (moi) | CP + renfort D2 (hors v0.2) + D4 + Sprint 6 solo | Coordination, classes cœur (hors v0.2), tests/perf/review, rendu final créatif | ~28 h |
+| **Theo** | D2 | Préparation équipe (Sprint 0) + classes cœur sur toutes les versions (entrées/sorties, NLP, perf, web server) | ~16 h |
+| **Johan** (moi) | CP + D4 + Sprint 6 solo | Coordination, tests/perf/review, rendu final créatif | ~24 h |
 
 ### Détail par version
 
 - **Haithem (D1)** — v0.1 : S1.2, S1.3, S1.4 · v0.2 : S2.2, S2.7 · v0.3 : S3.2, S3.3 · v0.4 : S4.2
 - **Mai (D3)** — v0.1 : S1.7 · v0.2 : S2.6, S2.8 · v0.3 : S3.7 · v0.4 : S4.4, S4.6 · v0.5 : S5.4
-- **Theo (D2)** — Sprint 0 : S0.1 → S0.4 · v0.2 : S2.3, S2.4, S2.5
-- **Johan (CP + renfort D2 hors v0.2 + D4 + Sprint 6)** —
+- **Theo (D2)** — Sprint 0 : S0.1 → S0.4 · v0.1 : S1.5, S1.6 · v0.2 : S2.3, S2.4, S2.5 · v0.3 : S3.4, S3.5 · v0.4 : S4.3 · v0.5 : S5.2, S5.3
+- **Johan (CP + D4 + Sprint 6)** —
   - **CP (coordination)** : création des branches v0.X, MR, code reviews finales, tags, push, suivi des deadlines.
-  - **Renfort D2 (hors v0.2 où Theo est en charge)** — v0.1 : S1.5, S1.6 · v0.3 : S3.4, S3.5 · v0.4 : S4.3 · v0.5 : S5.2, S5.3
   - **D4 (tests / perf / review)** — v0.1 : S1.8 · v0.2 : S2.9 · v0.4 : S4.5 · v0.5 : S5.5, S5.6
   - **Sprint 6 (en solo)** : choix de la piste, implémentation complète, restitution, tag final.
   - **Documentation** : `doc/decisions_v0.3.md`, `doc/decisions_finales.md`, `doc/rapport_final.md`.
@@ -150,13 +149,13 @@ Conventions :
 - ☐ `url` reste `null` (ou chaîne vide), c'est une *requête*.
   🏁 `new IndexedPage("hello world hello")` produit `words={hello, world}`, `counts={2,1}`.
 
-### S1.5 Méthodes simples `[Johan]` · t≈ 1 h · 🔗 S1.3
+### S1.5 Méthodes simples `[Theo/D2]` · t≈ 1 h · 🔗 S1.3
 - ☐ `String getUrl()`, retourne l'URL.
 - ☐ `int getCount(String word)`, recherche linéaire dans `words`, renvoie `0` si absent.
 - ☐ `String toString()` : `"IndexedPage [url=" + url + "]"`.
   🏁 `page.toString()` retourne exactement la forme attendue par l'énoncé.
 
-### S1.6 Méthodes mathématiques `[Johan]` · t≈ 1 h 30 · 🔗 S1.5
+### S1.6 Méthodes mathématiques `[Theo/D2]` · t≈ 1 h 30 · 🔗 S1.5
 - ☐ `getNorm()` : `Math.sqrt(somme des counts²)`.
 - ☐ `getPonderation(String word)` : `getCount(word) / getNorm()` (`0` si norme nulle).
 - ☐ `proximity(IndexedPage other)` : somme du produit des `getPonderation()` sur les mots communs.
@@ -186,7 +185,7 @@ Conventions :
 
 ## Sprint 2 — v0.2 · Entrées/Sorties · ⇒ 22 mai 2026
 
-> Cible : moteur fonctionnel sur 100 pages, CLI one‑shot + interactif. **Theo (D2) prend en charge les classes cœur ce sprint.**
+> Cible : moteur fonctionnel sur 100 pages, CLI one‑shot + interactif. **Theo (D2) en charge des classes cœur.**
 
 ### S2.1 Branche `v0.2` `[Johan/CP]` · t≈ 5 min · 🔗 v0.1
 - ☐ `git checkout -b v0.2` depuis le tag `v0.1`.
@@ -258,12 +257,12 @@ Conventions :
 - ☐ Charger en `Set<String>` (HashSet, recherche O(1)).
   🏁 `blacklist.contains("de") == true`.
 
-### S3.4 Pipeline de prétraitement requête `[Johan]` · t≈ 1 h 30 · 🔗 S3.2 + S3.3
+### S3.4 Pipeline de prétraitement requête `[Theo/D2]` · t≈ 1 h 30 · 🔗 S3.2 + S3.3
 - ☐ Méthode `String[] preprocess(String requete)` qui : `toLowerCase` (Locale FR) → split sur regex `[^\\p{L}]+` → lemmatize → filtre blacklist → filtre `length() < 2`.
 - ☐ Retourne le tableau de mots prétraités.
   🏁 `preprocess("Les pommes ! De ?? terre")` → `{"pomme", "terre"}`.
 
-### S3.5 Intégration dans `IndexedPage(String)` `[Johan]` · t≈ 30 min · 🔗 S3.4
+### S3.5 Intégration dans `IndexedPage(String)` `[Theo/D2]` · t≈ 30 min · 🔗 S3.4
 - ☐ Le constructeur de requête utilise `preprocess` au lieu de `split` brut.
   🏁 `new IndexedPage("les fruits")` est équivalent à `new IndexedPage("fruit")`.
 
@@ -304,7 +303,7 @@ Conventions :
 - ☐ ⚠️ **Préserver les signatures publiques** déjà testées en v0.1 / v0.2.
   🏁 Tous les tests v0.1 / v0.2 / v0.3 passent **sans modification**.
 
-### S4.3 Chargement parallèle des fichiers `[Johan]` · t≈ 2 h · 🔗 S4.2
+### S4.3 Chargement parallèle des fichiers `[Theo/D2]` · t≈ 2 h · 🔗 S4.2
 - ☐ Utiliser `Files.list(...).parallel().map(IndexedPage::new).collect(...)` pour exploiter les cœurs.
 - ☐ Mesurer : `System.nanoTime()` autour du constructeur.
   🏁 Sur 38 k pages, le temps d'indexation initial est < 60 s.
@@ -335,14 +334,14 @@ Conventions :
 
 ### S5.1 Branche `v0.5` `[Johan/CP]` · t≈ 5 min · 🔗 v0.4
 
-### S5.2 Serveur HTTP minimal `[Johan]` · t≈ 2 h
+### S5.2 Serveur HTTP minimal `[Theo/D2]` · t≈ 2 h
 - ☐ Créer `WebServer.java` qui utilise `com.sun.net.httpserver.HttpServer.create(addr, 0)`.
 - ☐ Routes : `GET /` (sert `index.html`), `GET /search?q=...` (sert le JSON).
 - ☐ Executor : `Executors.newFixedThreadPool(4)`.
 - ☐ Démarrage via `./herve serve` (mettre à jour le script).
   🏁 `curl http://localhost:8080/search?q=flan` renvoie un JSON 200 OK.
 
-### S5.3 Sérialisation JSON sans dépendance `[Johan]` · t≈ 1 h · 🔗 S5.2
+### S5.3 Sérialisation JSON sans dépendance `[Theo/D2]` · t≈ 1 h · 🔗 S5.2
 - ☐ Helper `toJson(SearchResult[] results)` — concat de `String`, échappement basique des `"` et `\\`.
 - ☐ `Content-Type: application/json; charset=utf-8`.
   🏁 `JSON.parse(...)` côté navigateur fonctionne sans erreur.
@@ -432,10 +431,10 @@ Conventions :
 | --- | --- | --- | :---: |
 | **Haithem** | D1 (I/O, persistance, classpath) | v0.1 → v0.4 | ~14 h |
 | **Hoang Xuan Mai** | D3 (TALN, algos avancés, frontend) | v0.1, v0.2, v0.3, v0.4, v0.5 | ~14 h |
-| **Theo** | D2 (classes cœur) | Sprint 0 + v0.2 | ~6 h |
-| **Johan** | CP + renfort D2 (hors v0.2) + D4 + Sprint 6 solo | Tous les sprints | ~28 h |
+| **Theo** | D2 (classes cœur, toutes versions) | Sprint 0 + v0.1 → v0.5 | ~16 h |
+| **Johan** | CP + D4 + Sprint 6 solo | Tous les sprints | ~24 h |
 
-> Ces chiffres sont **par équipier** sur la durée totale du projet (S18 → S25). La charge de Johan est volontairement plus élevée car il cumule les rôles de chef de projet, de D2 sur quatre sprints, de D4 (tests/perf/review) et porte seul le Sprint 6.
+> Ces chiffres sont **par équipier** sur la durée totale du projet (S18 → S25). La charge de Johan reste plus élevée car il cumule les rôles de chef de projet, de D4 (tests/perf/review) et porte seul le Sprint 6 ; à l'inverse Theo, comme D2 unique, hérite de toutes les classes cœur sur les 5 versions.
 
 ## Annexe — Risques et plans de contingence
 
@@ -446,7 +445,8 @@ Conventions :
 | Modification accidentelle de `compile_projet`/`herve` | F | branche `main` protégée + revue MR |
 | Membre absent | M | doc à jour pour reprise, et Sprint 6 isolé sur Johan donc indépendant des autres |
 | Crawler banni en piste A (Sprint 6) | F | délai 1 s + backoff exponentiel sur 429 |
-| Surcharge Johan (CP + D2 + D4 + Sprint 6) | M | Sprint 6 démarrable en parallèle de v0.5 ; Theo prend Sprint 0 et la majeure partie de D2 v0.2 pour décharger |
+| Surcharge Johan (CP + D4 + Sprint 6) | M | Sprint 6 démarrable en parallèle de v0.5 ; Theo absorbe tout D2, ce qui libère du temps pour le Sprint 6 |
+| Surcharge Theo (D2 unique sur 5 versions) | M | tâches D2 réparties sur 5 sprints distincts donc pas de pic ; Johan disponible en review D4 pour débloquer |
 
 ---
 
