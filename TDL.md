@@ -198,20 +198,20 @@ Conventions :
 - ☐ Réutiliser le constructeur `IndexedPage(String[] lines)` (`new IndexedPage(lines.toArray(new String[0]))` ou refactor en helper).
   🏁 Sur un fichier d'index local (test fixture), l'objet créé contient bien l'URL et les couples mot/occurrence.
 
-### S2.3 Classe `SearchResult` `[Theo]` · t≈ 30 min · indépendant
+### S2.3 Classe `SearchResult` `[Theo/D2]` · t≈ 30 min · indépendant
 - ☐ Attributs `private String url`, `private double score`.
 - ☐ Constructeur, getters.
 - ☐ `toString()` : `"SearchResult [url=" + url + ", score=" + score + "]"`.
   🏁 Test unitaire : `new SearchResult("u", 0.5).toString()` → forme exacte.
 
-### S2.4 Constructeur `SearchEngine(Path)` `[Theo]` · t≈ 2 h · 🔗 S2.2
+### S2.4 Constructeur `SearchEngine(Path)` `[Theo/D2]` · t≈ 2 h · 🔗 S2.2
 - ☐ `Files.list(indexation_directory)` → flux des fichiers.
 - ☐ Pour chaque fichier, instancier `IndexedPage(path)`.
 - ☐ Stocker dans `IndexedPage[] pages`.
 - ☐ Ajouter `throws IOException` à la signature du constructeur.
   🏁 `new SearchEngine(Paths.get("bin/INDEX")).getPagesNumber() == 100` sur le mini‑corpus.
 
-### S2.5 Méthodes `getPage`, `getPagesNumber` `[Theo]` · t≈ 15 min · 🔗 S2.4
+### S2.5 Méthodes `getPage`, `getPagesNumber` `[Theo/D2]` · t≈ 15 min · 🔗 S2.4
 - ☐ Implémentation triviale.
   🏁 Tests OK.
 
