@@ -476,52 +476,63 @@ Sur 38 000 pages × ~1 000 mots distincts par page, la naïveté algorithmique s
 
 ---
 
-## 5.5 v0.5 — Interface web · *échéance 12 juin 2026*
+## 5.5 v0.5 — Interface web · *échéance 5 juin 2026*
 
 **Objectif** : exposer le moteur via un navigateur. Une barre, un bouton, des résultats.
 
 ### Périmètre fonctionnel
 
 1. Serveur HTTP minimal (`com.sun.net.httpserver.HttpServer` — *inclus dans la JDK, pas de dépendance*).
-2. Endpoint `GET /search?q=...` retournant les résultats au format JSON ou HTML.
-3. Page d'accueil servie statiquement.
-4. Conformité RGAA basique (champ texte labellisé, navigation clavier).
+2. Lancement via la commande `herve web --recherche "<requête>"` (la commande démarre le serveur si besoin, puis envoie la requête).
+3. Endpoint `GET /?recherche=<requête>` retournant la page HTML des résultats.
+4. Endpoint `GET /test` répondant `OK` (sert de heartbeat pour détecter si le serveur est déjà lancé).
+5. Conformité RGAA basique (champ texte labellisé, navigation clavier).
 
 ### Architecture proposée
 
 ```
-Navigateur ── HTTP GET /search?q=... ──► HttpServer Java
+Navigateur ── HTTP GET /?recherche=... ──► HttpServer Java (port 2026)
+                                              │
+                                              ▼
+                                          HttpHandler découpe l'URI
                                               │
                                               ▼
                                           SearchEngine.launchRequest()
                                               │
                                               ▼
-                                          JSON serialization
+                                          rendu HTML + CSS
                                               │
                                   HTTP 200 ── │
                                               ▼
-                                          rendu DOM côté client
+                                          affichage navigateur
 ```
 
 ### Spécification d'API
 
 | Méthode | Path | Paramètres | Réponse |
 | --- | --- | --- | --- |
-| GET | `/` | — | HTML : page d'accueil avec champ de recherche |
-| GET | `/search` | `q=<string>` | `200 OK` JSON `[{"url":"...","score":0.83}, ...]` |
-| GET | `/search` | (pas de `q`) | `400 Bad Request` |
+| GET | `/` | `recherche=<string>` | `200 OK` HTML : page de résultats |
+| GET | `/test` | — | `200 OK` corps `OK` (heartbeat) |
+| GET | `/` | (pas de `recherche`) | `200 OK` HTML : page d'accueil avec champ de recherche |
 
 ### Décisions techniques à acter
 
-- **Sérialisation JSON** : à la main (concaténation `String`) — pas de Jackson/Gson, contrainte « zéro dépendance ».
-- **Encodage** : UTF‑8 partout, header `Content-Type: application/json; charset=utf-8`.
-- **Cache** : `Cache-Control: no-store` pour le développement.
+- **Port** : **2026** (fixé par l'enseignante — *« afin que tous les groupes utilisent le même port »*). Pas 8080.
+- **Sérialisation** : HTML + CSS rendus côté serveur (pas de JSON, pas de framework JS) — contrainte « zéro dépendance ».
+- **Encodage** : UTF‑8 partout. Header `Content-Type: text/html; charset=utf-8`.
+- ⚠️ **Bug connu (signalé par l'énoncé)** : la méthode `sendResponseHeaders` attend un nombre d'**octets**, pas de caractères. Toujours utiliser :
+  ```java
+  exchange.sendResponseHeaders(200, response.getBytes("UTF-8").length);
+  ```
+  Et **jamais** `response.length()` qui compte les caractères.
 - **Concurrence** : un thread par requête suffit pour la démo (`HttpServer.create(...).setExecutor(Executors.newFixedThreadPool(4))`).
+- **Référence** : <https://blog.ronanlefichant.fr/2019/05/java-http-server.html> (avec le correctif UTF-8 ci-dessus).
 
 ### Critères d'acceptation v0.5
 
-- [ ] Le serveur démarre via `./herve serve` (à intégrer au script d'entrée).
-- [ ] La page d'accueil s'affiche sur `http://localhost:8080`.
+- [ ] Le serveur démarre via `herve web --recherche "<requête>"` (qui lance le serveur si pas déjà actif).
+- [ ] `GET http://127.0.0.1:2026/test` renvoie `OK`.
+- [ ] `GET http://127.0.0.1:2026/?recherche=recette+du+gaspacho` renvoie une page HTML de résultats.
 - [ ] Une recherche complète boucle en moins de **300 ms** côté serveur (target wall‑clock).
 - [ ] Branche `v0.5`, tag `v0.5`.
 
@@ -706,7 +717,7 @@ L'accès SSH au GitLab IUT passe par le **VPN universitaire** depuis l'extérieu
 | S20 | 2 h | (suite v0.1) — **livraison v0.1 le 15/05** |
 | S21 | 10 h | v0.2 → v0.3 — **livraisons 22/05 et 26/05** |
 | S22 | 8 h | v0.4 — **livraison 29/05** |
-| S23 | 8 h | v0.5 — **livraison 12/06** |
+| S23 | 8 h | v0.5 — **livraison 05/06** |
 | S24 | 8 h | Version finale — **livraison 12/06** |
 | S25 | 4 h | Démo + soutenance + répartition des points |
 
@@ -732,8 +743,11 @@ L'accès SSH au GitLab IUT passe par le **VPN universitaire** depuis l'extérieu
 # Recherche interactive
 ./herve
 
-# Démarrage serveur web (v0.5)
-./herve serve
+# Démarrage serveur web + recherche en une commande (v0.5, port 2026)
+herve web --recherche "recette du gaspacho"
+
+# Heartbeat du serveur web (v0.5)
+curl http://127.0.0.1:2026/test  # → "OK"
 
 # Indexation à froid d'un site (rendu final, optionnel)
 ./herve index https://exemple.org

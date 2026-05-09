@@ -1,0 +1,224 @@
+27/04/2026 08:46        Section : Version 0.2 - Entrées/Sorties | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS UniCA…
+
+
+
+
+           Syllabus                         Généralités                       Rendus                            Évaluation
+
+
+               Rendus intermédiaires                                                             Rendu final 
+
+
+             Échéancier                     Travail sur Gitlab              Travail préparatoire - La recherche ve…
+
+
+               Version 0.1 - Structure de base                                    Version 0.2 - Entrées/Sorties
+
+
+                   Version 0.3 - Lemmatisation                                Version 0.4 - Passage à l'échelle
+
+
+                   Version 0.5 - Interface web                                    Rendu final - Soyez créatifs !
+
+
+
+
+     Échéance : vendredi 22 mai 2026, 20:00
+
+
+
+     Lors de cette seconde phase, nous allons finir de créer cette première version rudimentaire de notre
+     moteur de recherche, afin d'effectuer des recherches sur un échantillon de 100 pages déjà pré-
+     indexées.
+
+
+
+
+  Objectifs
+  L'objectif de cette version 0.2 est d'obtenir une première version fonctionnelle du moteur de recherche.
+
+  Il s'agit en particulier d'implémenter les fonctionnalités suivantes :
+
+        Lecture des fichiers textes correspondants aux pages indexées, en utilisant la
+        classe IndexedPage précédemment créée.
+        Lecture de la requête à partir de la ligne de commande.
+        La requête pouvant être assimilée à un document, on peut utiliser également une instance
+        de IndexedPage.
+        Calcul de la similarité entre chaque document et la requête.
+        Affichage des résultats triés par ordre de pertinence.
+        Possibilité de lancer le moteur de recherche en deux modes : un mode qui renvoie directement les
+                                                                                                       ?
+        résultats de la recherche, et un mode interactif permettant d'enchaîner des recherches dans le
+        terminal ou de quitter.
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=8#tabs-tree-start                                                      1/5
+27/04/2026 08:46        Section : Version 0.2 - Entrées/Sorties | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS UniCA…
+
+
+
+
+  Format des fichiers d'indexation
+  À chaque page est associé un fichier d'index.
+
+  Son format est très simple :
+
+        La 1re ligne contient seulement l'URL de la page web correspondante.
+        Chaque ligne suivante contient un mot du document, suivi de ":" et du nombre d'occurrences du mot.
+
+
+  Ces fichiers sont au format UTF-8.
+
+
+
+  Vous devez implémenter le constructeur manquant de la classe IndexPage, qui permet de générer le
+  contenu d'indexation à partir d'un fichier d'index présent sur le disque (cf. diagramme de classe ).
+
+  Comme les fichiers sont petits, vous pouvez pour l'instant vous contenter d'utiliser Files.readAllLines ()
+  pour lire le contenu du fichier (vous verrez ulétrieurement en TD d'autres méthodes plus efficaces,
+  notamment pour de gros fichiers).
+
+
+     Remarque :
+     Lire un fichier sur le disque est susceptible de générer une erreur d'entrée-sortie (par exemple, parce
+     qu'il n'y a pas de fichier à l'emplacement demandé, ou parce que le programme n'a pas la permission
+     d'y accéder).
+     En Java, dès qu'une méthode est susceptible de générer une erreur (to raise an exception), elle doit
+     soit gérer le cas d'erreur, soit indiquer dans sa signature la possibilité qu'une erreur soit générée.
+     Pour l'instant, vous pouvez simplement ajouter throws IOException à la signature du constructeur
+     en question (Eclipse vous proposera de le faire).
+
+
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=8#tabs-tree-start                                                      2/5
+27/04/2026 08:46        Section : Version 0.2 - Entrées/Sorties | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS UniCA…
+
+
+            Indexation de 100 pages web ZIP
+
+            Cette archive contient le résultat de l'indexation de 100 pages web issues du site web Vikidia (sur le thème de
+            la gastronomie).
+
+            Chaque fichier correspond à une des pages ; son format est le suivant :
+
+                   URL du site
+                   mot:nombre d'occurrences
+                   ...
+                   mot:nombre d'occurrences
+
+
+            Les fichiers sont encodés en UTF8 au format UNIX (\n pour un saut de ligne).
+
+
+            43.9 Ko
+
+
+
+
+  Classe principale
+  Vous devez maintenant implémenter les classes SearchResult et SearchEngine, telles que décrites dans
+  le diagramme de classe présenté à l'étape précédente .
+
+  Toutes les méthodes publiques doivent être testées dans SearchEngineTests.
+
+  La classe SearchEngine est la classe principale qui a pour fonction de lancer une recherche, via sa
+  méthode launch_request().
+
+  En particulier, le constructeur de la classe SearchEngine doit lire tous les fichiers index du dossier
+  indexation_directory, et générer un tableau (array) de pages indexées (IndexedPage), stockées dans
+  l'attribut privé pages.
+
+  (Remarque : lorsque vous implémenterez le constructeur de SearchEngine, java vous préviendra là encore
+  qu'une IOException est susceptible d'être générée.)
+
+  La méthode printResults() doit afficher les 15 résultats les plus pertinents d'une recherche - du plus
+  pertinent au moins pertinent. Les résultats de pertinence nulle ne doivent pas apparaître, donc il peut
+  éventuellement y avoir moins de 15 résultats affichés.
+
+  Exemple de test possible (en supposant que les fichiers d'index sont dans un dossier INDEX exporté dans
+  le dossier bin :
+
+
+  /*
+  Il faut d'abord récupérer le chemin du dossier INDEX, pour initialiser le moteur de recher
+
+  On pourrait procéder simplement comme ceci :
+
+
+       Path index = Paths.get("INDEX");
+
+  Mais il semble dificile d'arriver à le faire fonctionner à la fois dans Eclipse
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=8#tabs-tree-start                                                      3/5
+27/04/2026 08:46        Section : Version 0.2 - Entrées/Sorties | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS UniCA…
+  et dans le terminal (trop sensible au classpath)...
+
+  Une solution plus fiable (mais nettement plus complexe !) est de procéder ainsi :
+  */
+  URL location = SearchEngine.class.getProtectionDomain().getCodeSource().getLocation();
+  Path binFolder = Paths.get(location.toURI());
+  Path indexFolder = binFolder.resolve("INDEX");
+  /*
+  On crée maintenant une instance du moteur de recherche.
+  */
+  SearchEngine se = new SearchEngine(index);
+  /*
+  On lance une recherche et on affiche les résultats.
+  */
+  String requestString = "cerise flan";
+  IndexedPage request = new IndexedPage(requestString);
+  se.printResults(requestString);
+
+
+
+  Affichage obtenu :
+
+  SearchResult [url=https://fr.vikidia.org/wiki/Flan, score=37.71273413657018]
+  SearchResult [url=https://fr.vikidia.org/wiki/Clafoutis, score=16.116459280507602]
+  SearchResult [url=https://fr.vikidia.org/wiki/Tarte, score=5.076730825668095]
+
+
+
+
+  Interface
+  Rajouter dans la classe SearchEngine une méthode main, qui servira d'interface au programme.
+
+        Si le programme SearchEngine est appelé avec des arguments, ces arguments sont interprétés
+        comme une requête.
+        Dans ce cas, printResults() est appelée pour afficher les résultats de cette requête et le programme
+        s'arrête.
+        Si le programme SearchEngine est appelé sans argument, on bascule en mode interactif.
+        Une invite de commande doit permettre à l'utilisateur de saisir une requête.
+        On récupère les mots rentrés par l'utilisateur.
+        Si l'utilisateur a tapé exit, on quitte.
+        Sinon, on interprète les mots tapés comme une requête et on affiche les résultats de la recherche,
+        puis on recommence.
+
+
+
+  Testez son bon fonctionnement dans le shell (par ex. Powershell sous Windows ou Bash sous Linux) :
+
+        mode interactif : java -cp . search_engine.SearchEngine
+        mode "one-shot" : java -cp . search_engine.SearchEngine flan cerise
+
+
+
+            Rendu de la version 0.2                                                                                          À faire 
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=8#tabs-tree-start                                                      4/5
+27/04/2026 08:46        Section : Version 0.2 - Entrées/Sorties | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS UniCA…
+            Ouvert le : dimanche 5 février 2023, 00:00 À rendre : dimanche 26 février 2023, 20:00
+
+
+            Rendre uniquement le (ou les) dossier(s) source(s) sous forme d'une archive ZIP.
+
+
+
+  ◄Version 0.1 -                      Aller à…                                                                         Version 0.3 -►
+   Structure de base                                                                                                 Lemmatisation
+
+
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=8#tabs-tree-start                                                      5/5
+

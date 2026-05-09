@@ -73,7 +73,7 @@ On identifie les 3 risques techniques critiques (passage à 38 000 pages, cohér
 - v0.2 → **22 mai 2026**
 - v0.3 → **26 mai 2026**
 - v0.4 → **29 mai 2026**
-- v0.5 → **12 juin 2026**
+- v0.5 → **5 juin 2026**
 - Sprint 6 (rendu final) → **12 juin 2026**
 - Soutenance → **S25**
 
@@ -328,42 +328,45 @@ Conventions :
 
 ---
 
-## Sprint 5 — v0.5 · Interface web · ⇒ 12 juin 2026
+## Sprint 5 — v0.5 · Interface web · ⇒ 5 juin 2026
 
 > Travail parallèle avec Sprint 6 si possible (Sprint 6 = Johan en solo, donc on peut paralléliser).
+> ⚠️ **Spec officielle** (PDF Moodle v0.5) : commande unique `herve web --recherche "..."`, port **2026** imposé, rendu **HTML+CSS** côté serveur (pas de JSON, pas de JS).
 
 ### S5.1 Branche `v0.5` `[Johan/CP]` · t≈ 5 min · 🔗 v0.4
 
 ### S5.2 Serveur HTTP minimal `[Theo/D2]` · t≈ 2 h
-- ☐ Créer `WebServer.java` qui utilise `com.sun.net.httpserver.HttpServer.create(addr, 0)`.
-- ☐ Routes : `GET /` (sert `index.html`), `GET /search?q=...` (sert le JSON).
+- ☐ Créer `WebServer.java` qui utilise `com.sun.net.httpserver.HttpServer.create(new InetSocketAddress(2026), 0)`.
+- ☐ Routes : `GET /test` → réponse `OK` (heartbeat) ; `GET /?recherche=...` → page HTML de résultats.
 - ☐ Executor : `Executors.newFixedThreadPool(4)`.
-- ☐ Démarrage via `./herve serve` (mettre à jour le script).
-  🏁 `curl http://localhost:8080/search?q=flan` renvoie un JSON 200 OK.
+- ☐ ⚠️ Bug officiellement signalé par l'énoncé : utiliser `exchange.sendResponseHeaders(200, response.getBytes("UTF-8").length)` (octets, pas caractères). **Jamais** `response.length()`.
+  🏁 `curl http://127.0.0.1:2026/test` renvoie `OK` 200.
 
-### S5.3 Sérialisation JSON sans dépendance `[Theo/D2]` · t≈ 1 h · 🔗 S5.2
-- ☐ Helper `toJson(SearchResult[] results)` — concat de `String`, échappement basique des `"` et `\\`.
-- ☐ `Content-Type: application/json; charset=utf-8`.
-  🏁 `JSON.parse(...)` côté navigateur fonctionne sans erreur.
+### S5.3 Rendu HTML + CSS côté serveur `[Theo/D2]` · t≈ 1 h 30 · 🔗 S5.2
+- ☐ Helper `renderHtml(SearchResult[] results)` — concat de `String`, échappement basique des `<`, `>`, `&`, `"`.
+- ☐ `Content-Type: text/html; charset=utf-8`.
+- ☐ Style CSS inline ou en `<style>` dans la page (zéro dépendance, pas de framework).
+  🏁 La page rendue par `/?recherche=flan` est valide HTML 5 et lisible sans JS.
 
-### S5.4 Frontend statique `[Mai]` · t≈ 3 h
-- ☐ `web/index.html` : un `<input type="search">`, un `<button>`, un `<ul>` pour les résultats.
-- ☐ `web/style.css` : minimaliste type GitHub, fond blanc, max‑width 720 px.
-- ☐ `web/app.js` : `fetch('/search?q=' + encodeURIComponent(...))` → render.
-- ☐ Affichage du temps de réponse côté serveur (header `X-Search-Time-Ms`).
-  🏁 Démo manuelle : la page tape *flan*, 3 résultats apparaissent en < 300 ms.
+### S5.4 Commande `herve web --recherche "..."` `[Mai]` · t≈ 2 h · 🔗 S5.2
+- ☐ Adapter `herve` pour rediriger sur `Herve.main` qui parse `web --recherche "..."`.
+- ☐ Vérifier si le serveur tourne (`GET /test`) ; sinon le démarrer en arrière-plan.
+- ☐ Envoyer `GET http://127.0.0.1:2026/?recherche=<urlencode(q)>`, afficher la réponse.
+  🏁 `herve web --recherche "recette du gaspacho"` ouvre/utilise le serveur et affiche le HTML.
 
-### S5.5 Servir les fichiers statiques depuis le serveur Java `[Johan/D4]` · t≈ 1 h · 🔗 S5.2 + S5.4
-- ☐ Une route catch‑all qui mappe les fichiers du dossier `web/` (mime type basique : html/css/js).
-  🏁 `http://localhost:8080/` charge la page sans erreur 404 sur les assets.
+### S5.5 Page d'accueil `[Mai]` · t≈ 1 h · 🔗 S5.2
+- ☐ Sur `GET /` (sans paramètre `recherche`), retourner une page HTML avec `<input name="recherche">` et `<button>`.
+- ☐ Form `method="get" action="/"` — le navigateur reconstruit `/?recherche=...` automatiquement.
+  🏁 `http://127.0.0.1:2026/` affiche la page d'accueil sans erreur.
 
 ### S5.6 Tests d'intégration `[Johan/D4]` · t≈ 1 h 30
 - ☐ Test : démarrer le serveur, faire 5 requêtes via `HttpClient`, vérifier les 200 OK.
-- ☐ Test : `q` manquant → 400.
-- ☐ Test : utf‑8 dans la requête (`café`) → réponse correcte.
+- ☐ Test : `recherche` manquant → page d'accueil servie (200 OK).
+- ☐ Test : utf‑8 dans la requête (`café`) → réponse correcte (vérifier les octets `getBytes("UTF-8")`).
+- ☐ Test : `/test` renvoie `OK`.
 
 ### S5.7 Code review + tag v0.5 `[Johan/CP]` · t≈ 30 min
-- ☐ Tag `v0.5` avant **12 juin 20:00**.
+- ☐ Tag `v0.5` avant **5 juin 20:00**.
 
 ---
 

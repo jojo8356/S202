@@ -1,0 +1,99 @@
+27/04/2026 08:46        Section : Version 0.4 - Passage à l'échelle | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS Un…
+
+
+
+
+           Syllabus                         Généralités                       Rendus                             Évaluation
+
+
+               Rendus intermédiaires                                                             Rendu final 
+
+
+             Échéancier                     Travail sur Gitlab              Travail préparatoire - La recherche ve…
+
+
+               Version 0.1 - Structure de base                                       Version 0.2 - Entrées/Sorties
+
+
+                   Version 0.3 - Lemmatisation                               Version 0.4 - Passage à l'échelle
+
+
+                   Version 0.5 - Interface web                                     Rendu final - Soyez créatifs !
+
+
+
+
+     Échéance : vendredi 29 mai 2026, 20:00
+
+
+
+     Le but est d'obtenir une première version vraiment utilisable en conditions « réelles » (ici 38 000
+     pages), c'est-à-dire qui puisse passer à l'échelle (« scalable »).
+
+
+
+
+  Objectif
+  Il s'agit maintenant de faire en sorte que ce moteur de recherche fonctionne en un temps raisonnable sur
+  un ensemble de pages conséquent, en l'occurrence la version française de Vikidia, soit environ 38 000
+  pages.
+
+  Vous n'êtes plus guidés désormais, c'est à vous de faire preuve d'initiatives.
+
+  Conseils
+  Vous pouvez poser des questions à vos enseignants si vous êtes bloqués - de préférence à l'IUT (par
+  exemple entre deux TD), plutôt que par mail, c'est plus simple et plus interactif.
+
+
+     Recommandations :
+            Faites des essais déjà sur une partie seulement des 38 000 pages (par exemple, extrayez «
+            seulement » 1000 fichiers pour commencer).                                                ?
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=10#tabs-tree-start                                                      1/2
+27/04/2026 08:46        Section : Version 0.4 - Passage à l'échelle | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS Un…
+
+            Il vous faudra adapter vos algorithmes et vos structures de données. Pour les données, en
+            particulier, des Hashmap sont plus bien adaptées que les tableaux que nous utilisions jusque-là.
+            Si votre code est bien structuré, vous devriez pouvoir changer les structures de données utilisées
+            en interne sans avoir besoin de changer l'interface de vos classes (la signature de vos méthodes
+            publiques reste la même).
+
+
+
+
+     Prenez le temps de faire des tests pour comparer les vitesses obtenues avec différentes structures de
+     données, en fonction du nombre de fichiers. Ce sera intéressant à exposer lors de la soutenance.
+
+     Prenez aussi le temps de comprendre comment fonctionnent les structures de données que vous
+     utilisez, et pourquoi certaines sont plus adaptées que d'autres. Vous pourrez avoir des questions
+     dessus en soutenance ou en QCM.
+
+
+
+  Vous pouvez bien entendu poser des questions à vos enseignants si certains points sont obscurs pour vous
+  (là encore, plutôt à l'IUT que par mail).
+
+
+
+            Fichiers d'index de fr.vikidia.org 7Z
+
+            6.3 Mo
+
+
+
+            Rendu de la version 1.0                                                                                          À faire 
+            Ouvert le : dimanche 5 février 2023, 00:00 À rendre : dimanche 19 mars 2023, 20:00
+
+
+            Rendre uniquement le (ou les) dossier(s) source(s) sous forme d'une archive ZIP.
+
+
+   Version 0.3 -                                                                                                         Version 0.5 -
+  ◄Lemmatisation                      Aller à…                                                                          Interface web►
+
+
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=10#tabs-tree-start                                                      2/2
+

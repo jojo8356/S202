@@ -9,8 +9,18 @@ tp_preparatoire/td3_modele_vectoriel/reponses.html
 # Rendus zippés (à uploader manuellement sur Moodle)
 tp_preparatoire/rendu_tp_python.zip
 
+# Java — classes compilées et artefacts Eclipse personnels
+bin/
+.classpath
+.project
+.settings/
+
 # BMad Method — Claude Code skills locaux (ré-installables via `npx bmad-method install ...`)
 .claude/
 
 # BMad Method — config personnelle (jamais touchée par l'installeur)
 _bmad/custom/config.user.toml
+
+# OS
+.DS_Store
+*.swp

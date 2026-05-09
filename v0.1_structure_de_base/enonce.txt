@@ -1,0 +1,206 @@
+27/04/2026 08:46        Section : Version 0.1 - Structure de base | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS Uni…
+
+
+
+
+            Syllabus                        Généralités                       Rendus                             Évaluation
+
+
+               Rendus intermédiaires                                                             Rendu final 
+
+
+              Échéancier                    Travail sur Gitlab              Travail préparatoire - La recherche ve…
+
+
+               Version 0.1 - Structure de base                                         Version 0.2 - Entrées/Sorties
+
+
+                   Version 0.3 - Lemmatisation                                Version 0.4 - Passage à l'échelle
+
+
+                   Version 0.5 - Interface web                                     Rendu final - Soyez créatifs !
+
+
+
+
+     Échéance : vendredi 15 mai 2026, 20:00
+
+
+
+     Lors de cette première phase, nous allons implémenter une version rudimentaire du moteur de
+     recherche, qui fonctionnera pour l'instant uniquement en mode test.
+
+
+  L'idée est d'avoir un premier prototype, pas du tout optimisé à ce stade, et pas encore capable de gérer
+  les entrées/sorties, mais avec un cœur déjà à peu près fonctionnel.
+
+  Ce prototype sera amélioré au fur et à mesure que vous verrez de nouvelles notions en Java.
+
+  Il vous sera demandé de faire des rendus à la fin de chaque étape (i.e. pour chaque nouvelle version) et
+  de conserver ces versions successives (en principe, vous pouvez les retélécharger depuis chaque dépôt
+  Moodle).
+
+  Cela vous permettra de mesurer l'impact des optimisations et améliorations successives que vous ferez et
+  de présenter les gains de performance (pertinence, rapidité, utilisation mémoire) lors de la soutenance
+  finale.
+
+  Important : le rendu se fera sur Gitlab.
+
+  Vous travaillerez sur une branche nommée v0.1 (git checkout - b v0.1).
+  Le commit correspondant au rendu devra être tagué v0.1 (git tag v0.1 -m "version 0.1").
+
+  Attention à scrupuleusement respecter les noms de branche et de commit, sinon votre rendu ne sera? pas
+  détecté !
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=7#tabs-tree-start                                                      1/4
+27/04/2026 08:46          Section : Version 0.1 - Structure de base | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS Uni…
+
+
+
+  Notre première implémentation du moteur de recherche devra correspondre à ceci (télécharger au format
+  PDF) :
+
+
+                                                                 search_engine
+
+
+
+
+                                IndexedPage                                                            SearchEngine
+           - url: String                                                           - indexation_directory: Path
+           - words: String[ ]                                                      - pages: IndexedPages[ ]
+           - counts: int[ ]                                                        + SearchEngine(Path indexation_directory)
+           + IndexedPage(String[ ] lines)                                          + getPage(int i): IndexedPage
+           + IndexedPage(Path path)                                                + getPagesNumber(): int
+           + IndexedPage(String text)                                              + launchRequest(String requestString): SearchResult[ ]
+           + getUrl(): String                                                      + printResults(String requestString)
+           + getNorm(): double
+           - getCount(String word): int
+           + getPonderation(String word): double
+           + proximity(IndexedPage page): double
+           + toString(): String
+
+
+
+
+                                                                                                       SearchResult
+                                                                                   - url: String
+                                                                                   - score: double
+                                                                                   + SearchResult(String url, double score)
+                                                                                   + getUrl(): String
+                                                                                   + getScore(): double
+                                                                                   + toString(): String
+
+
+
+
+                                  search_engine_tests
+
+                   SearchEngineTests
+       + static main(String[] args)
+
+
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=7#tabs-tree-start                                                        2/4
+27/04/2026 08:46        Section : Version 0.1 - Structure de base | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS Uni…
+
+
+
+  Pour ce premier rendu, on vous demande d'implémenter :
+
+        La classe IndexedPage, à l'exception du constructeur IndexedPage(Path path) qui sera implémenté à
+        la prochaine étape.
+        La classe de tests SearchEngineTests.
+
+
+
+
+  La classe IndexedPage
+  La classe IndexedPage représente une page web sous forme indexée.
+
+  Attributs
+        String url : l'url de la page qui a été indexée
+        String[ ] words : un tableau (array) de chaînes de caractères. Les tableaux en Java ressemblent
+        beaucoup aux tableaux C (on verra plus tard qu'il existe d'autres conteneurs plus élaborés en Java,
+        mais pour l'instant nous utiliserons des tableaux "de base"). Par rapport au C, ils présentent tout de
+        même quelques améliorations notables :
+             ils sont initialisés (à 0 pour des entiers, 0.0 pour des flottants, null pour des objets...).
+             on a accès à leur taille via leur attribut .length
+             on ne peut pas sortir par erreur du tableau (une exception est levée en ce cas)
+
+
+
+  Constructeurs
+        IndexedPage(String[ ] lines) : construction à partir d'un tableau de chaîne de caractères.
+        La première chaîne du tableau correspondra à l'URL de la page, les autres chaînes seront de la forme
+        "mot:nombre d'occurences".
+        Exemple d'utilisation :
+        IndexedPage(new String[] {"http://example.org", "hello:1", "world:1", "java:7"})
+        Cela signifie que le document indexé a pour url "http://example.org" et contient 1 fois le mot hello, 1
+        fois le mot world et 7 fois le mot java.
+        IndexedPage(String text) : construction à partir d'un texte. Ce sera utilisé pour convertir la requête en
+        objet IndexedPage lorsqu'on lancera une recherche.
+        Il faut donc parcourir le texte et compter le nombre de fois que chaque mot apparaît. Vous pouvez
+        utiliser la méthode String.split(String regex)  pour découper la chaîne et Arrays.sort(Object[ ]
+        a)  pour trier les mots.
+
+
+
+  Méthodes
+        String getUrl() : renvoie l'url.
+        int getNorm() : calcule et renvoie la norme du vecteur à partir du nombre d'occurrences de chaque
+        mot (relire au besoin le TP python sur le modèle vectoriel).
+        int getCount(String word) : renvoie le nombre d'occurrences du mot word dans le document.
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=7#tabs-tree-start                                                      3/4
+27/04/2026 08:46        Section : Version 0.1 - Structure de base | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS Uni…
+
+        double getPonderation(String Word) : renvoie la valeur de la coordonnée correspondant au mot
+        word dans le vecteur normalisé correspondant au document indexé (à ce stade, on implémente
+        seulement le modèle vectoriel basique, sans utiliser de logarithme).
+        double proximity(IndexedPage page) : on calcule la similitude entre deux pages, c'est-à-dire le
+        produit scalaire du vecteur de la page et du vecteur de l'autre page. Remarque : en fait, on n'a pas
+        besoin de générer vraiment les vecteurs pour calculer le produit scalaire, puisque les coordonnées
+        nulles ne nous intéressent pas. Il suffit d'effectuer la somme du produit des coordonnées uniquement
+        pour les mots apparaissant dans les deux documents.
+        String toString(): renvoie "IndexedPage [url=http://example.org]" dans le cas de l'exemple précédent.
+
+
+
+
+  La classe de tests SearchEngineTests
+  Cette classe devra tester toutes les méthodes publiques de IndexedPage, ainsi que les deux constructeurs
+  que vous avez implémenté.
+
+  Voici une base pour vos tests, à étoffer pour que toutes les méthodes et constructeurs soient testés :
+
+  public static void main(String[] args) {
+    IndexedPage page1 = new IndexedPage(new String[] {"http://fr.example.org", "hello:10", "
+      System.out.println(page1);
+      System.out.println(page1.getPonderation("hello"));
+      System.out.println(page1.getPonderation("other"));
+      IndexedPage page2 = new IndexedPage(new String[] {"http://fr.example2.org", "hello:5", "
+      System.out.println("Degre de similarite des deux pages: " + page1.proximity(page2));
+  }
+
+
+
+  Et voici l'affichage correspondant que vous devriez obtenir en l'état :
+
+
+  IndexedFile [url=http://fr.example.org]
+  0.8944271909999159
+  0.0
+  Degre de similarite des deux pages: 0.8304547985373998
+
+
+   Travail préparatoire - La                                                                                           Version 0.2 -
+  ◄recherche vectorielle                    Aller à…                                                                 Entrées/Sorties►
+
+
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=7#tabs-tree-start                                                      4/4
+

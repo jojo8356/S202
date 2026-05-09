@@ -1,0 +1,169 @@
+27/04/2026 08:46        Section : Version 0.3 - Lemmatisation | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS UniCA …
+
+
+
+
+           Syllabus                         Généralités                      Rendus                            Évaluation
+
+
+               Rendus intermédiaires                                                            Rendu final 
+
+
+             Échéancier                     Travail sur Gitlab             Travail préparatoire - La recherche ve…
+
+
+               Version 0.1 - Structure de base                                     Version 0.2 - Entrées/Sorties
+
+
+                Version 0.3 - Lemmatisation                                   Version 0.4 - Passage à l'échelle
+
+
+                   Version 0.5 - Interface web                                    Rendu final - Soyez créatifs !
+
+
+
+
+     Échéance : lundi 26 mai 2026, 20:00
+
+
+
+     Pour l'instant, lorsque l'on effectue une requête, il faut que les mots rentrés soient déjà sous forme
+     lemmatisée : par exemple, fruit et non fruits.
+     Lors de l'indexation des pages web, le fichier d'indexation qui a été généré est déjà sous forme
+     lemmatisée, mais il faut maintenant que vous lemmatisiez les requêtes.
+
+
+
+
+  Avant-propos
+
+     Passage en pilotage manuel !
+
+     Jusqu'ici, vous étiez précisément guidés, puisqu'on vous donnait à chaque étape :
+
+            la liste précise des fonctionnalités à implémenter,
+            la manière de l'implémenter (classes et méthodes à créer).
+
+
+     À partir de cette étape, vous allez être de moins en moins guidés et il vous faudra faire des choix.
+
+     Gardez à l'esprit qu'il n'y a pas forcément un unique bon choix possible, mais que pour autant toutes
+     les possibilités ne se valent pas !                                                               ?
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=9#tabs-tree-start                                                     1/3
+27/04/2026 08:46        Section : Version 0.3 - Lemmatisation | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS UniCA …
+
+
+
+
+  Attention, il vous faudra être capables d'expliquer vos choix et de les défendre lors de la soutenance :
+
+        quelle étaient les autres possibilités ?
+        pourquoi avoir retenu celle-ci ?
+
+
+  (Par exemple, pour des choix impactant significativement la performance, vous pourrez vous appuyer sur
+  des benchmarks, mais il y aussi des choix d'architecture qui concernent la propreté du code et qui sont
+  également importants.)
+
+  Dans tous les cas, tout ce que vous implémentez doit être correctement testé !
+
+
+
+
+  Lemmatisation
+  La requête saisie au clavier doit être :
+
+        convertie en minuscules
+        lemmatisée
+
+
+  Pour ce faire, vous aurez besoin d'un dictionnaire qui associe à chaque mot son lemme.
+
+  Un tel dictionnaire n'étant pas si facile à trouver sur internet, nous vous le fournissons (voir plus loin).
+
+
+
+
+     Remarque :
+     Ce dictionnaire est basé sur une liste de mots français trouvée sur internet, à laquelle a été appliquée
+     un outil de lemmatisation.
+     Les résultats ont été ensuite un peu retouchés, notamment pour les formes conjuguées des verbes,
+     mais ils restent perfectibles.
+     Ce n'est pas bien grave, le plus important est que la même lemmatisation soit appliquée lors de
+     l'indexation et lors de la requête.
+
+     Il ne faut donc pas que vous cherchiez à l'améliorer, puisque vous ce n'est pas vous qui générez
+     l'indexation.
+     (Éventuellement, en fin de projet, vous pourrez chercher à le faire s'il vous reste du temps, mais cela
+     impliquera soit de régénérer toute l'indexation, soit au minimum d'écrire un script pour la retoucher).
+
+
+
+
+            Dictionnaire de lemmatisation TXT
+
+            Dictionnaire associant à chaque mot son lemme. Encodage : UTF-8.
+
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=9#tabs-tree-start                                                     2/3
+27/04/2026 08:46         Section : Version 0.3 - Lemmatisation | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS UniCA …
+
+
+            7.4 Mo
+
+
+
+
+  Filtrage
+  Certains petits mots sont très fréquents mais n'apportent pas grand chose à la requête.
+
+  On peut les filtrer pour éviter qu'ils rendent la requête moins pertinente.
+
+  Pour vous faire gagner du temps, nous vous fournissons une liste de bases de mots à éliminer, que vous
+  pourrez modifier si vous le souhaitez (mais ce n'est pas l'essentiel).
+
+  Vous pouvez aussi choisir d'enlever tous les mots trop petits (une lettre ou deux par exemple), qui sont
+  souvent peu pertinents ou ambigus (homonymes impossibles à exploiter hors-contexte).
+
+
+
+            Liste noire TXT
+
+            Liste noire (à éventuellement modifier) de mots fréquents en français mais peu pertinents pour la recherche.
+            Encodage : UTF-8.
+
+
+            217 octets
+
+
+
+
+  Caractères non alphabétiques
+  Jusqu'à présent, on a supposé que l'utilisateur rentrait ses mots séparés par des espaces.
+
+  On peut imaginer maintenant que l'utilisateur rentre une phrase ou un morceau de phrase, comportant
+  des caractères non alphabétiques.
+
+  À vous de réfléchir à la manière dont vous aller le gérer.
+
+
+
+            Rendu de la version 0.3                                                                                         À faire 
+            Ouvert le : dimanche 5 février 2023, 00:00 À rendre : dimanche 5 mars 2023, 20:00
+
+
+            Rendre uniquement le (ou les) dossier(s) source(s) sous forme d'une archive ZIP.
+
+
+
+  ◄Version 0.2 -                    Aller à…                                                                Version 0.4 - Passage►
+   Entrées/Sorties                                                                                                     à l'échelle
+
+
+
+
+https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=9#tabs-tree-start                                                      3/3
+

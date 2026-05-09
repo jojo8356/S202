@@ -1,0 +1,44 @@
+# GitLab CI/CD pipeline pour HeRVé
+# Vérifie compilation + tests sur chaque push.
+
+image: eclipse-temurin:17-jdk
+
+stages:
+  - build
+  - test
+
+# Cache des classes compilées pour éviter de tout recompiler entre jobs
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - bin/
+
+# 1. Compilation : doit passer sans erreur ni warning
+build:
+  stage: build
+  script:
+    - chmod +x compile_projet
+    - ./compile_projet
+  artifacts:
+    paths:
+      - bin/
+    expire_in: 1 day
+
+# 2. Tests : exécute SearchEngineTests, parse la sortie TAP
+test:
+  stage: test
+  needs: ["build"]
+  script:
+    # Extraction des fichiers d'index si l'archive est présente dans ressources/
+    - if [ -f ressources/INDEX.zip ]; then unzip -o ressources/INDEX.zip -d bin/ ; fi
+    # Exécution des tests, sortie TAP capturée
+    - java -cp bin search_engine_tests.SearchEngineTests | tee tests.tap
+    # Échec si au moins un "not ok"
+    - if grep -q "^not ok" tests.tap; then echo "Tests failed"; exit 1; fi
+  artifacts:
+    when: always
+    paths:
+      - tests.tap
+    reports:
+      junit: tests.tap
+    expire_in: 1 week
