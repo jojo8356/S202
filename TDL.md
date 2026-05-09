@@ -53,17 +53,17 @@ On identifie les 3 risques techniques critiques (passage à 38 000 pages, cohér
 | --- | --- | --- | :---: |
 | **Haithem** | D1 | I/O, persistance, classpath | ~14 h |
 | **Hoang Xuan Mai** | D3 | TALN et algorithmes avancés | ~14 h |
-| **Theo** | Sprint 0 + D2 (v0.2) | Préparation équipe + entrées/sorties | ~6 h |
-| **Johan** (moi) | CP + D2 (hors v0.2) + D4 + Sprint 6 solo | Coordination, classes cœur (hors v0.2), tests/perf/review, rendu final créatif | ~28 h |
+| **Theo** | D2 | Préparation équipe (Sprint 0) + classes cœur v0.2 (entrées/sorties) | ~6 h |
+| **Johan** (moi) | CP + renfort D2 (hors v0.2) + D4 + Sprint 6 solo | Coordination, classes cœur (hors v0.2), tests/perf/review, rendu final créatif | ~28 h |
 
 ### Détail par version
 
 - **Haithem (D1)** — v0.1 : S1.2, S1.3, S1.4 · v0.2 : S2.2, S2.7 · v0.3 : S3.2, S3.3 · v0.4 : S4.2
 - **Mai (D3)** — v0.1 : S1.7 · v0.2 : S2.6, S2.8 · v0.3 : S3.7 · v0.4 : S4.4, S4.6 · v0.5 : S5.4
-- **Theo (Sprint 0 + D2 v0.2)** — Sprint 0 : S0.1 → S0.4 · v0.2 : S2.3, S2.4, S2.5
-- **Johan (CP + D2 hors v0.2 + D4 + Sprint 6)** —
+- **Theo (D2)** — Sprint 0 : S0.1 → S0.4 · v0.2 : S2.3, S2.4, S2.5
+- **Johan (CP + renfort D2 hors v0.2 + D4 + Sprint 6)** —
   - **CP (coordination)** : création des branches v0.X, MR, code reviews finales, tags, push, suivi des deadlines.
-  - **D2 hors v0.2** — v0.1 : S1.5, S1.6 · v0.3 : S3.4, S3.5 · v0.4 : S4.3 · v0.5 : S5.2, S5.3
+  - **Renfort D2 (hors v0.2 où Theo est en charge)** — v0.1 : S1.5, S1.6 · v0.3 : S3.4, S3.5 · v0.4 : S4.3 · v0.5 : S5.2, S5.3
   - **D4 (tests / perf / review)** — v0.1 : S1.8 · v0.2 : S2.9 · v0.4 : S4.5 · v0.5 : S5.5, S5.6
   - **Sprint 6 (en solo)** : choix de la piste, implémentation complète, restitution, tag final.
   - **Documentation** : `doc/decisions_v0.3.md`, `doc/decisions_finales.md`, `doc/rapport_final.md`.
@@ -186,7 +186,7 @@ Conventions :
 
 ## Sprint 2 — v0.2 · Entrées/Sorties · ⇒ 22 mai 2026
 
-> Cible : moteur fonctionnel sur 100 pages, CLI one‑shot + interactif. **Theo prend la main sur D2 ce sprint.**
+> Cible : moteur fonctionnel sur 100 pages, CLI one‑shot + interactif. **Theo (D2) prend en charge les classes cœur ce sprint.**
 
 ### S2.1 Branche `v0.2` `[Johan/CP]` · t≈ 5 min · 🔗 v0.1
 - ☐ `git checkout -b v0.2` depuis le tag `v0.1`.
@@ -432,8 +432,8 @@ Conventions :
 | --- | --- | --- | :---: |
 | **Haithem** | D1 (I/O, persistance, classpath) | v0.1 → v0.4 | ~14 h |
 | **Hoang Xuan Mai** | D3 (TALN, algos avancés, frontend) | v0.1, v0.2, v0.3, v0.4, v0.5 | ~14 h |
-| **Theo** | Sprint 0 + D2 (v0.2) | Sprint 0 + v0.2 | ~6 h |
-| **Johan** | CP + D2 (hors v0.2) + D4 + Sprint 6 solo | Tous les sprints | ~28 h |
+| **Theo** | D2 (classes cœur) | Sprint 0 + v0.2 | ~6 h |
+| **Johan** | CP + renfort D2 (hors v0.2) + D4 + Sprint 6 solo | Tous les sprints | ~28 h |
 
 > Ces chiffres sont **par équipier** sur la durée totale du projet (S18 → S25). La charge de Johan est volontairement plus élevée car il cumule les rôles de chef de projet, de D2 sur quatre sprints, de D4 (tests/perf/review) et porte seul le Sprint 6.
 
