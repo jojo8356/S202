@@ -273,7 +273,7 @@ IndexedPage page1 = new IndexedPage(new String[] {
     "http://fr.example.org", "hello:10", "world:5"
 });
 System.out.println(page1);
-// → IndexedFile [url=http://fr.example.org]
+// → IndexedPage [url=http://fr.example.org]
 System.out.println(page1.getPonderation("hello"));
 // → 0.8944271909999159
 System.out.println(page1.getPonderation("other"));
@@ -343,13 +343,13 @@ public class SearchResult {
 #### Attributs
 
 ```java
-private Path indexation_directory;
+private Path indexationDirectory;
 private IndexedPage[] pages;
 ```
 
 #### Constructeur
 
-`SearchEngine(Path indexation_directory) throws IOException`
+`SearchEngine(Path indexationDirectory) throws IOException`
 - Liste tous les fichiers du dossier.
 - Construit un `IndexedPage` par fichier.
 - Stocke le tableau dans `pages`.

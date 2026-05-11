@@ -1,7 +1,7 @@
 # Coquilles repérées dans les énoncés officiels
 
-> **Statut** : signalées à Mme Pourcelot par mail (cf. `msg_pourcelot.txt` à la racine).
-> **Mise à jour** : ce fichier est la source de vérité pour l'équipe ; chaque coquille passera en *résolu* dès qu'on aura le retour.
+> **Statut** : signalées à M. Pourcelot par mail (cf. `msg_pourcelot.txt` à la racine).
+> **Mise à jour** : retours reçus le 2026-05-10 23:27 — toutes les coquilles v0.1 et v0.2 sont **confirmées**. Les énoncés locaux (`v0.1_structure_de_base/enonce.txt`, `v0.2_entrees_sorties/enonce.txt`) ont été corrigés en conséquence. M. Pourcelot mettra à jour les pages HTML officielles de son côté.
 
 ---
 
@@ -10,34 +10,39 @@
 ### C1.1 — `IndexedFile` au lieu de `IndexedPage` dans la sortie attendue
 - **Localisation** : page 4 du PDF, exemple de sortie.
 - **Texte fautif** : `IndexedFile [url=http://fr.example.org]`
-- **Correction présumée** : `IndexedPage [url=http://fr.example.org]` (la classe s'appelle `IndexedPage`).
-- **Statut** : ⏳ en attente de réponse Pourcelot.
+- **Correction** : `IndexedPage [url=http://fr.example.org]` (la classe s'appelle `IndexedPage`).
+- **Statut** : ✅ Confirmé par M. Pourcelot (mail 2026-05-10).
 
 ### C1.2 — `int getNorm()` vs `+ getNorm(): double`
 - **Localisation** : page 3 du PDF, description des méthodes (vs page 2 du diagramme UML).
 - **Conflit** : le texte dit `int getNorm()`, le diagramme dit `+ getNorm(): double`.
-- **Correction présumée** : suivre le diagramme → **`double`** (cohérent avec `Math.sqrt(...)` qui renvoie un `double`).
-- **Statut** : ⏳ en attente de réponse Pourcelot.
+- **Correction** : suivre le diagramme → **`double`** (cohérent avec `Math.sqrt(...)`).
+- **Statut** : ✅ Confirmé par M. Pourcelot (mail 2026-05-10).
 
 ### C1.3 — `getCount` privée mais utilisée par les tests
 - **Localisation** : page 2 du PDF, diagramme UML.
 - **Texte fautif** : `- getCount(String word): int` (visibilité privée).
 - **Problème** : utilisée depuis `SearchEngineTests`, donc forcément publique en pratique.
-- **Correction présumée** : `+ getCount(String word): int` (publique).
-- **Statut** : ⏳ en attente de réponse Pourcelot.
+- **Correction** : `+ getCount(String word): int` (publique).
+- **Statut** : ✅ Confirmé par M. Pourcelot (mail 2026-05-10).
 
 ### C1.4 — `IndexedPages[]` (avec "s") au lieu de `IndexedPage[]`
 - **Localisation** : page 2 du PDF, diagramme UML, classe `SearchEngine`.
 - **Texte fautif** : `- pages: IndexedPages[ ]`
-- **Correction présumée** : `- pages: IndexedPage[ ]` (singulier, cohérent avec le nom de la classe).
-- **Statut** : ⏳ en attente de réponse Pourcelot.
-- **Impact code** : par défaut, l'équipe utilise `IndexedPage[]` (pas de classe `IndexedPages` distincte) jusqu'au retour.
+- **Correction** : `- pages: IndexedPage[ ]` (singulier, cohérent avec le nom de la classe).
+- **Statut** : ✅ Confirmé par M. Pourcelot (mail 2026-05-10).
 
-### C1.5 (mineur) — `getPonderation(String Word)` avec un W majuscule
+### C1.5 — `indexation_directory` (snake_case) au lieu de `indexationDirectory`
+- **Localisation** : page 2 du PDF, diagramme UML, classe `SearchEngine` (attribut + paramètre du constructeur). Apparaît aussi dans le texte de la v0.2.
+- **Texte fautif** : `- indexation_directory: Path` et `+ SearchEngine(Path indexation_directory)`.
+- **Correction** : `indexationDirectory` (camelCase, conforme aux conventions Java — réflexe Python à oublier ici).
+- **Statut** : ✅ Confirmé par M. Pourcelot (mail 2026-05-10) — ajouté à la liste sur sa propre relecture.
+
+### C1.6 (mineur) — `getPonderation(String Word)` avec un W majuscule
 - **Localisation** : page 4 du PDF, description.
 - **Texte fautif** : `double getPonderation(String Word)` (paramètre `Word`).
-- **Correction présumée** : `double getPonderation(String word)` (camelCase cohérent).
-- **Statut** : non signalé (cosmétique, sans ambiguïté pour l'implémentation).
+- **Correction** : `double getPonderation(String word)` (camelCase cohérent).
+- **Statut** : ✅ Corrigé localement (cosmétique, non signalé dans le mail).
 
 ---
 
@@ -46,15 +51,15 @@
 ### C2.1 — `IndexPage` au lieu de `IndexedPage`
 - **Localisation** : page 2 du PDF, instruction.
 - **Texte fautif** : *« Vous devez implémenter le constructeur manquant de la classe **IndexPage** »*
-- **Correction présumée** : `IndexedPage`.
-- **Statut** : ⏳ en attente de réponse Pourcelot.
+- **Correction** : `IndexedPage`.
+- **Statut** : ✅ Corrigé localement (cosmétique, non explicitement listé dans le mail mais sans ambiguïté).
 
 ### C2.2 — `launch_request()` au lieu de `launchRequest()`
 - **Localisation** : page 3 du PDF, description de la classe `SearchEngine`.
 - **Texte fautif** : *« sa méthode **launch_request()** »* (snake_case).
 - **Conflit** : le diagramme officiel v0.1 dit `launchRequest()` (camelCase).
-- **Correction présumée** : suivre le diagramme → **`launchRequest()`**.
-- **Statut** : ⏳ en attente de réponse Pourcelot.
+- **Correction** : suivre le diagramme → **`launchRequest()`** (camelCase en Java, snake_case en Python — réflexe à oublier ici).
+- **Statut** : ✅ Confirmé par M. Pourcelot (mail 2026-05-10).
 
 ### C2.3 — Variable `index` non définie dans le code exemple
 - **Localisation** : page 4 du PDF, code exemple pour résoudre le chemin INDEX.
@@ -64,8 +69,8 @@
   // ...
   SearchEngine se = new SearchEngine(index);  // ← `index` n'est jamais défini
   ```
-- **Correction présumée** : `new SearchEngine(indexFolder)`.
-- **Statut** : ⏳ en attente de réponse Pourcelot.
+- **Correction** : `new SearchEngine(indexFolder)`.
+- **Statut** : ✅ Confirmé par M. Pourcelot (mail 2026-05-10).
 
 ### C2.4 (mineur) — Fautes d'orthographe
 - *« vous verrez **ulétrieurement** en TD »* → ultérieurement
@@ -90,7 +95,7 @@
 - **Localisation** : page 2 du PDF, en-tête de la section de rendu.
 - **Texte fautif** : *« **Rendu de la version 1.0** »*
 - **Correction présumée** : *« Rendu de la version 0.4 »* (toute la section concerne la v0.4).
-- **Statut** : ⏳ en attente de réponse Pourcelot.
+- **Statut** : ⏳ non signalé pour l'instant (à traiter dans un mail séparé si besoin).
 
 ### C4.2 (mineur) — Tournure inversée
 - **Texte fautif** : *« des Hashmap sont **plus bien** adaptées que les tableaux »*
@@ -127,4 +132,19 @@ Quand une coquille est tranchée par l'enseignante :
 
 ## Historique des résolutions
 
-_(vide pour l'instant — à remplir au fur et à mesure des retours)_
+### 2026-05-10 — Retour de M. Pourcelot (mail à Johan, 23:27)
+Toutes les coquilles signalées dans le mail du 2026-05-09 sont confirmées :
+- C1.1 (`IndexedFile` → `IndexedPage` dans `toString()`).
+- C1.2 (`int getNorm()` → `double getNorm()`, suivre le diagramme).
+- C1.3 (`getCount` doit être publique).
+- C1.4 (`IndexedPages[]` → `IndexedPage[]`, retirer le « s »).
+- C2.2 (`launch_request()` → `launchRequest()`, camelCase en Java).
+- C2.3 (`new SearchEngine(index)` → `new SearchEngine(indexFolder)`).
+
+M. Pourcelot a ajouté de lui-même une coquille supplémentaire :
+- **C1.5** (`indexation_directory` → `indexationDirectory`), même logique de camelCase que `launchRequest`.
+
+Actions appliquées :
+1. Énoncés locaux (`v0.1_structure_de_base/enonce.txt`, `v0.2_entrees_sorties/enonce.txt`) corrigés.
+2. `docs/project-context.md`, `docs/cahier_des_charges.md`, `TDL.md` mis à jour pour utiliser `indexationDirectory` et retirer les notes « ignorer la coquille ».
+3. Les pages HTML officielles seront mises à jour par M. Pourcelot de son côté.

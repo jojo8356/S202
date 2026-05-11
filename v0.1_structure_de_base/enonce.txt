@@ -67,15 +67,15 @@ https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=7#tabs-tree-
 
 
                                 IndexedPage                                                            SearchEngine
-           - url: String                                                           - indexation_directory: Path
-           - words: String[ ]                                                      - pages: IndexedPages[ ]
-           - counts: int[ ]                                                        + SearchEngine(Path indexation_directory)
+           - url: String                                                           - indexationDirectory: Path
+           - words: String[ ]                                                      - pages: IndexedPage[ ]
+           - counts: int[ ]                                                        + SearchEngine(Path indexationDirectory)
            + IndexedPage(String[ ] lines)                                          + getPage(int i): IndexedPage
            + IndexedPage(Path path)                                                + getPagesNumber(): int
            + IndexedPage(String text)                                              + launchRequest(String requestString): SearchResult[ ]
            + getUrl(): String                                                      + printResults(String requestString)
            + getNorm(): double
-           - getCount(String word): int
+           + getCount(String word): int
            + getPonderation(String word): double
            + proximity(IndexedPage page): double
            + toString(): String
@@ -149,7 +149,7 @@ https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=7#tabs-tree-
 
   Méthodes
         String getUrl() : renvoie l'url.
-        int getNorm() : calcule et renvoie la norme du vecteur à partir du nombre d'occurrences de chaque
+        double getNorm() : calcule et renvoie la norme du vecteur à partir du nombre d'occurrences de chaque
         mot (relire au besoin le TP python sur le modèle vectoriel).
         int getCount(String word) : renvoie le nombre d'occurrences du mot word dans le document.
 
@@ -157,7 +157,7 @@ https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=7#tabs-tree-
 https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=7#tabs-tree-start                                                      3/4
 27/04/2026 08:46        Section : Version 0.1 - Structure de base | TBFTE202 - ECUE S2.02 - Exploration algorithmique d'un problème | LMS Uni…
 
-        double getPonderation(String Word) : renvoie la valeur de la coordonnée correspondant au mot
+        double getPonderation(String word) : renvoie la valeur de la coordonnée correspondant au mot
         word dans le vecteur normalisé correspondant au document indexé (à ce stade, on implémente
         seulement le modèle vectoriel basique, sans utiliser de logarithme).
         double proximity(IndexedPage page) : on calcule la similitude entre deux pages, c'est-à-dire le
@@ -190,7 +190,7 @@ https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=7#tabs-tree-
   Et voici l'affichage correspondant que vous devriez obtenir en l'état :
 
 
-  IndexedFile [url=http://fr.example.org]
+  IndexedPage [url=http://fr.example.org]
   0.8944271909999159
   0.0
   Degre de similarite des deux pages: 0.8304547985373998

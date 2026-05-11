@@ -68,7 +68,7 @@ Le code Python du TP préparatoire dans `tp_preparatoire/td3_modele_vectoriel/` 
 - **Classes** : `PascalCase` (ex. `IndexedPage`, `SearchEngine`).
 - **Méthodes / variables** : `camelCase` (ex. `getCount`, `launchRequest`).
 - **Constantes** : `MAJUSCULES_AVEC_UNDERSCORES` (ex. `TAILLE_MAX`).
-- **`launchRequest()`** est en camelCase (énoncé v0.1 — l'énoncé v0.2 contient une coquille `launch_request()` à ignorer).
+- **`launchRequest()`** est en camelCase (énoncé v0.1 — l'énoncé v0.2 contenait une coquille `launch_request()` ; confirmée et corrigée le 2026-05-10, cf. `coquilles_enonce.md` C2.2).
 
 #### Visibilité & encapsulation
 - Tous les attributs **`private`** (énoncé v0.1 explicite : `- url: String`, `- words: String[]`, etc.).
@@ -89,7 +89,7 @@ Le code Python du TP préparatoire dans `tp_preparatoire/td3_modele_vectoriel/` 
   if (Math.abs(a - b) < EPSILON) { ... }
   ```
 - Préférer **types primitifs** (`int`, `double`) dans les calculs ; **Wrappers** (`Integer`, `Double`) uniquement dans les collections génériques (cours R201 explicite).
-- `getNorm()` retourne **`double`** (suivre le diagramme officiel v0.1, ignorer la coquille `int getNorm()` du texte).
+- `getNorm()` retourne **`double`** (suivre le diagramme officiel v0.1 ; coquille `int getNorm()` du texte confirmée et corrigée le 2026-05-10, cf. `coquilles_enonce.md` C1.2).
 
 #### Locale & accents
 - **Toujours** utiliser `Locale.FRANCE` explicite avec `toLowerCase()` pour gérer correctement les accents français (« ÉTÉ » → « été ») :
@@ -146,7 +146,7 @@ Le code Python du TP préparatoire dans `tp_preparatoire/td3_modele_vectoriel/` 
 
 #### Diagramme de classes officiel (énoncé v0.1) — source de vérité
 - `IndexedPage` : 3 attributs privés (`url: String`, `words: String[]`, `counts: int[]`), 3 constructeurs publics (`String[] lines`, `Path path`, `String text`), 6 méthodes publiques.
-- `SearchEngine` : 2 attributs privés (`indexation_directory: Path`, `pages: IndexedPage[]`), constructeur, 4 méthodes publiques.
+- `SearchEngine` : 2 attributs privés (`indexationDirectory: Path`, `pages: IndexedPage[]`), constructeur, 4 méthodes publiques.
 - `SearchResult` : 2 attributs privés (`url: String`, `score: double`), constructeur, 3 méthodes publiques.
 
 #### Coquilles connues des énoncés
@@ -366,10 +366,7 @@ not ok 3 - getNorm sur page vide retourne 0
 - Privilégier le **code expressif** (nom de variable/méthode > commentaire).
 - Commentaires utiles seulement pour le **pourquoi** (intention, contrainte, workaround).
 - Anti-pattern : `i++; // incrémente i`.
-- Cas spécifique projet : commenter les **coquilles d'énoncés contournées** :
-  ```java
-  // L'énoncé v0.2 dit "launch_request()" mais le diagramme v0.1 dit "launchRequest()" — on suit le diagramme.
-  ```
+- Cas spécifique projet : commenter ponctuellement une **divergence d'énoncé non encore tranchée** (cf. `docs/coquilles_enonce.md`). Une fois la coquille confirmée par l'enseignante et l'énoncé local corrigé, on retire le commentaire.
 
 #### Naming
 - **Variables / méthodes / params** : `camelCase`.
@@ -510,12 +507,12 @@ Documente les conventions pour l'équipe : branches, tags, commits, MR, tests.
 - **Capacité initiale `HashMap`** : pour 38k pages, prédimensionner (`new HashMap<>(50_000)`).
 
 #### 🚫 Pièges spécifiques HeRVé
-- **`getNorm()`** retourne `double` (suivre diagramme v0.1, ignorer coquille du texte).
-- **`launchRequest()`** en camelCase (ignorer coquille v0.2 `launch_request`).
+- **`getNorm()`** retourne `double` (suivre diagramme v0.1 ; coquille texte confirmée le 2026-05-10).
+- **`launchRequest()`** en camelCase, attribut/paramètre **`indexationDirectory`** en camelCase aussi (coquilles v0.2 `launch_request` / `indexation_directory` confirmées le 2026-05-10).
 - **`toString()` format strict** : `"IndexedPage [url=...]"`, pas `"IndexedFile"`.
 - **`printResults`** : 15 max, scores nuls exclus.
 - **`exit`** comparaison avec `.equals()`.
-- **Snippet INDEX** : `new SearchEngine(indexFolder)`, pas `index` (coquille v0.2).
+- **Snippet INDEX** : `new SearchEngine(indexFolder)`, pas `index` (coquille v0.2 confirmée le 2026-05-10).
 
 #### 🚫 Pièges v0.3 (lemmatisation)
 - **NE PAS modifier `french_dictionary.txt`** (énoncé textuel).

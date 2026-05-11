@@ -69,7 +69,7 @@ https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=8#tabs-tree-
 
 
 
-  Vous devez implémenter le constructeur manquant de la classe IndexPage, qui permet de générer le
+  Vous devez implémenter le constructeur manquant de la classe IndexedPage, qui permet de générer le
   contenu d'indexation à partir d'un fichier d'index présent sur le disque (cf. diagramme de classe ).
 
   Comme les fichiers sont petits, vous pouvez pour l'instant vous contenter d'utiliser Files.readAllLines ()
@@ -121,10 +121,10 @@ https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=8#tabs-tree-
   Toutes les méthodes publiques doivent être testées dans SearchEngineTests.
 
   La classe SearchEngine est la classe principale qui a pour fonction de lancer une recherche, via sa
-  méthode launch_request().
+  méthode launchRequest().
 
   En particulier, le constructeur de la classe SearchEngine doit lire tous les fichiers index du dossier
-  indexation_directory, et générer un tableau (array) de pages indexées (IndexedPage), stockées dans
+  indexationDirectory, et générer un tableau (array) de pages indexées (IndexedPage), stockées dans
   l'attribut privé pages.
 
   (Remarque : lorsque vous implémenterez le constructeur de SearchEngine, java vous préviendra là encore
@@ -161,7 +161,7 @@ https://lms.univ-cotedazur.fr/2025/course/view.php?id=14987&section=8#tabs-tree-
   /*
   On crée maintenant une instance du moteur de recherche.
   */
-  SearchEngine se = new SearchEngine(index);
+  SearchEngine se = new SearchEngine(indexFolder);
   /*
   On lance une recherche et on affiche les résultats.
   */

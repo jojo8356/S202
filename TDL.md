@@ -204,7 +204,7 @@ Conventions :
   🏁 Test unitaire : `new SearchResult("u", 0.5).toString()` → forme exacte.
 
 ### S2.4 Constructeur `SearchEngine(Path)` `[Theo/D2]` · t≈ 2 h · 🔗 S2.2
-- ☐ `Files.list(indexation_directory)` → flux des fichiers.
+- ☐ `Files.list(indexationDirectory)` → flux des fichiers.
 - ☐ Pour chaque fichier, instancier `IndexedPage(path)`.
 - ☐ Stocker dans `IndexedPage[] pages`.
 - ☐ Ajouter `throws IOException` à la signature du constructeur.
